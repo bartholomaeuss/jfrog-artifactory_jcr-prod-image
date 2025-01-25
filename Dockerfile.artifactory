@@ -1,0 +1,1 @@
+FROM releases-docker.jfrog.io/jfrog/artifactory-jcr:latest
