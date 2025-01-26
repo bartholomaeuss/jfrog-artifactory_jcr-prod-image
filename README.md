@@ -46,6 +46,50 @@ User: `admin`, Password: `password`
 sudo docker run -d --net=host -v ~/jfrog/artifactory/var/:/var/opt/jfrog/artifactory --restart=unless-stopped releases-docker.jfrog.io/jfrog/artifactory-jcr:latest
 ```
 
+#### Disable ssl within docker cli
+
+Create settings file
+
+```
+cd /etc/docker
+sudo touch ./daemon.json
+```
+
+Write settings
+
+```
+cat <<EOF >> daemon.json
+{
+  "insecure-registries": ["<host>:8082"]
+}
+EOF
+```
+
+You will need to restart the service
+
+```
+sudo systemctl restart docker
+
+```
+
+#### Login into Docker artifactory using docker cli
+
+```
+echo "<password>" | docker login -u <user> --password-stdin <host>:8082/docker
+```
+
+#### Push given docker image manually into local artifactory
+
+```
+docker pull --platform linux/arm64 prom/node-exporter:latest
+```
+```
+docker tag prom/node-exporter:latest <host>:8082/docker-dev/prom/node-exporter/arm64:latest
+```
+```
+docker push <host>:8082/docker-dev/prom/node-exporter/arm64:latest
+```
+
 See the official
 [jfrog artifactory](https://jfrog.com/help/r/jfrog-installation-setup-documentation/installation-configuration)
 documentation.
