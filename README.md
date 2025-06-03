@@ -90,6 +90,13 @@ docker tag prom/node-exporter:latest <host>:8082/docker-dev/prom/node-exporter/a
 docker push <host>:8082/docker-dev/prom/node-exporter/arm64:latest
 ```
 
+#### Login into Docker artifactory using kubernetes
+
+```
+
+```
+
+
 See the official
 [jfrog artifactory](https://jfrog.com/help/r/jfrog-installation-setup-documentation/installation-configuration)
 documentation.
