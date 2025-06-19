@@ -16,7 +16,9 @@ provide_container(){
     scp "${dockerfile}" "${user}@${remote}":"~/${dockerfile}"
     ssh -l "${user}" "${remote}" "docker kill \$(docker ps -q --filter ancestor=${image}:${tag})"
     ssh -l "${user}" "${remote}" "docker build -t ${image}:${tag} -f ./${dockerfile} ."
-    ssh -l "${user}" "${remote}" "docker run -d --net=host -v ~/jfrog/artifactory/var/:/var/opt/jfrog/artifactory --restart=unless-stopped ${image}:${tag}"
+    ssh -l "${user}" "${remote}" "docker volume inspect jfrog >/dev/null 2>&1 || docker volume create jfrog"
+    ssh -l "${user}" "${remote}" "docker network inspect jfrog >/dev/null 2>&1 || docker network create jfrog"
+    ssh -l "${user}" "${remote}" "docker run -d --network jfrog -p 8081:8081 -p 8082:8082 -v jfrog:/var/opt/jfrog/artifactory --restart=unless-stopped ${image}:${tag}"
     exit 0
 }
 
